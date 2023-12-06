@@ -1,7 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Sidebar } from '../Sidebar';
-import Chat from '../Chat/Minimal';
+import Chat from '../Chat';
 import { ChatProvider, useChatContext } from '../../contexts/ChatProvider';
+
+export type MessageTheme = 'classic' | 'bubble';
 
 export type ChatUIProps = {
   LogoRender?: ReactNode;
@@ -9,6 +11,8 @@ export type ChatUIProps = {
   chatName?: string | ReactNode;
   hasLogoutButton?: boolean;
   hasNewChatButton?: boolean;
+  hasSidebar?: boolean;
+  messageTheme?: MessageTheme;
 };
 
 const ChatUI: React.FC<ChatUIProps> = ({
@@ -16,21 +20,25 @@ const ChatUI: React.FC<ChatUIProps> = ({
   LogoRender,
   hasLogoutButton = true,
   hasNewChatButton = true,
+  hasSidebar = false,
   chatName,
+  messageTheme = 'classic',
 }) => {
   const { component } = useChatContext();
 
   return (
     <div className="flex">
-      <Sidebar
-        hasSettingsButton={Boolean(SettingRender)}
-        hasLogoutButton={hasLogoutButton}
-        hasNewChatButton={hasNewChatButton}
-        Logo={LogoRender}
-        name={chatName}
-      />
+      {hasSidebar && (
+        <Sidebar
+          hasSettingsButton={Boolean(SettingRender)}
+          hasLogoutButton={hasLogoutButton}
+          hasNewChatButton={hasNewChatButton}
+          Logo={LogoRender}
+          name={chatName}
+        />
+      )}
       <div className="flex h-[100svh] w-full flex-col">
-        {component.selected === 'chat' && <Chat />}
+        {component.selected === 'chat' && <Chat theme={messageTheme} />}
         {SettingRender && component.selected === 'setting' && (
           <div>{SettingRender}</div>
         )}

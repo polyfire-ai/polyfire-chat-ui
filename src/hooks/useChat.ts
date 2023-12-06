@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 
 import { useState, useEffect, useCallback } from 'react';
-import type { Chat as ChatType, ChatOptions } from 'polyfire-js/chats/index.js';
 
-import { usePolyfire } from 'polyfire-js/hooks/index.js';
 import { generateUUIDV4 } from 'polyfire-js/helpers/uuid.js';
+
+import type { Chat as ChatType, ChatOptions } from 'polyfire-js/chats';
+import { usePolyfire } from 'polyfire-js/hooks/index.js';
 
 export type Message = {
   chat_id: string;
@@ -37,7 +38,10 @@ const getChatList = async (
     },
   })
     .then((res) => res.json())
-    .then((res) => res.reverse())
+    .then((res) => {
+      if (res && res instanceof Array) return res.reverse();
+      return [];
+    })
     .catch((err) => err);
 };
 
@@ -104,7 +108,9 @@ export type ChatInstance = {
 };
 
 export default function useChat(
-  options?: Omit<ChatOptions, 'chatId'>
+  options?: Omit<ChatOptions, 'chatId'>,
+  onError?: (error: string) => void,
+  onSuccess?: () => void
 ): ChatInstance {
   const {
     auth: {
@@ -156,15 +162,15 @@ export default function useChat(
 
   const retrieveChat = useCallback(async (id: string) => {
     setHistoryLoading(true);
-    const existingChatInstance = new Chat({
+    const prevchatInstance = new Chat({
       ...options,
       chatId: id,
     } as ChatOptions);
 
-    setChatInstance(existingChatInstance);
+    setChatInstance(chatInstance);
     setChatId(id);
 
-    existingChatInstance
+    prevchatInstance
       .getMessages()
       .then(setHistory)
       .catch(setHistoryError)
@@ -253,6 +259,7 @@ export default function useChat(
   const onSendMessage = useCallback(
     async (message: string): Promise<void> => {
       try {
+        console.log({ chatInstance, AnswerLoading });
         if (AnswerLoading) return;
 
         setAnswerLoading(true);
@@ -292,12 +299,13 @@ export default function useChat(
           aiMessage.content += chunk;
           setAnswer({ ...aiMessage });
           setAnswerLoading(false);
+          console.log('in data');
         });
 
         stream.on('error', (error: string) => {
-          // eslint-disable-next-line no-console
-          console.error('error', error);
+          console.error({ error3: error });
           setAnswerError(error);
+          onError?.(error);
           stream.stop();
         });
 
@@ -305,16 +313,18 @@ export default function useChat(
           setAnswer(undefined);
           aiMessage.created_at = new Date().getTime().toString();
           setHistory((prev) => [aiMessage, ...prev]);
+          onSuccess?.();
+          console.log('in end');
         });
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        console.error({ error2: error });
         if (error instanceof Error) {
           setAnswerError(error.message);
+          onError?.(error.message);
         }
       }
     },
-    [chatInstance]
+    [chatInstance, AnswerLoading]
   );
 
   useEffect(() => {

@@ -7,7 +7,9 @@ import React, {
 } from 'react';
 import type { ChatOptions } from 'polyfire-js/chats/index.js';
 import { useChat } from 'polyfire-js/hooks/index.js';
+
 import type { ChatInstance } from 'polyfire-js/hooks/useChat.js';
+// import useChat from '../hooks/useChat';
 
 export type ChatComponent = 'chat' | 'setting';
 

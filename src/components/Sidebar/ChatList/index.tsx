@@ -38,15 +38,16 @@ const ChatList = () => {
       role="button"
       tabIndex={0}
     >
-      {data?.map((item: ChatInfos) => (
-        <ChatItem
-          key={item.id}
-          chat={item}
-          onSelectChat={onSelectChat}
-          onDeleteChat={onDeleteChat}
-          onRenameChat={onRenameChat}
-        />
-      ))}
+      {data &&
+        data?.map((item: ChatInfos) => (
+          <ChatItem
+            key={item.id}
+            chat={item}
+            onSelectChat={onSelectChat}
+            onDeleteChat={onDeleteChat}
+            onRenameChat={onRenameChat}
+          />
+        ))}
     </div>
   );
 };
