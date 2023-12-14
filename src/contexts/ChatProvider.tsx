@@ -6,19 +6,11 @@ import React, {
   useState,
 } from 'react';
 import type { ChatOptions } from 'polyfire-js/chats/index.js';
-import { useChat } from 'polyfire-js/hooks/index.js';
+// import { useChat } from 'polyfire-js/hooks/index.js';
 
-import type { ChatInstance } from 'polyfire-js/hooks/useChat.js';
-// import useChat from '../hooks/useChat';
-
-export type ChatComponent = 'chat' | 'setting';
-
-export type ChatContextValue = ChatInstance & {
-  component: {
-    onChange: (component: ChatComponent) => void;
-    selected: ChatComponent;
-  };
-};
+import useChat from '../hooks/useChat';
+import { ChatMode, ChatContextValue } from '../types';
+import useScrollToBottom from '../hooks/useScrollToBottom';
 
 const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 
@@ -26,15 +18,28 @@ export const ChatProvider: React.FC<{
   children: ReactNode;
   options?: Partial<ChatOptions>;
 }> = ({ children, options }) => {
-  const chat = useChat(options);
-  const [showComponent, setShowComponent] = useState<ChatComponent>('chat');
+  const chatInstance = useChat(options);
+  const [showComponent, setShowComponent] = useState<ChatMode>('chat');
+
+  const { ref, isAtBottom, scrollToBottom } = useScrollToBottom<HTMLDivElement>(
+    [chatInstance.history.data, chatInstance.answer.data]
+  );
 
   const chatContextValue = useMemo(
     () => ({
-      ...chat,
+      ...chatInstance,
+      chat: {
+        ...chatInstance.chat,
+        ref,
+        isAtBottom,
+      } as ChatContextValue['chat'],
+      utils: {
+        ...chatInstance.utils,
+        onScrollToBottom: scrollToBottom,
+      } as ChatContextValue['utils'],
       component: { selected: showComponent, onChange: setShowComponent },
     }),
-    [JSON.stringify(chat), showComponent]
+    [JSON.stringify(chatInstance), showComponent, isAtBottom]
   );
 
   return (

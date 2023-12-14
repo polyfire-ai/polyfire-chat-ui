@@ -8,7 +8,7 @@ const LogoutButton = () => {
   return (
     <button
       type="button"
-      className="flex w-full gap-x-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors duration-200 focus:outline-none text-stone-200 hover:bg-stone-800"
+      className="flex w-full gap-x-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors duration-200 focus:outline-none text-custom-100 hover:bg-custom-800"
       onClick={logout}
     >
       <MdLogout className="h-6 w-6" />

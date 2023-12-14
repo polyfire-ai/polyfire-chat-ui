@@ -7,7 +7,7 @@ export const Skeleton = () => (
   // eslint-disable-next-line jsx-a11y/control-has-associated-label
   <button
     type="button"
-    className="animate-pulse bg-stone-800 rounded w-full flex flex-col gap-y-2 rounded-lg px-3 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-stone-800"
+    className="animate-pulse bg-custom-800 rounded w-full flex flex-col gap-y-2 rounded-lg px-3 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-custom-800"
   >
     <div className="h-4 rounded" />
     <div className="h-3 rounded w-1/2" />
@@ -95,7 +95,7 @@ const ChatItem = ({
     <div className="relative w-full">
       <button
         type="button"
-        className="w-full flex flex-col gap-y-2 rounded-lg px-3 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-stone-800"
+        className="w-full flex flex-col gap-y-2 rounded-lg px-3 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-custom-800"
         onClick={onSelectChatHandler}
       >
         {showInput ? (
@@ -110,24 +110,24 @@ const ChatItem = ({
                   handleTitleSubmit();
                 }
               }}
-              className="text-sm font-medium capitalize text-stone-200 bg-stone-700 rounded px-2 py-1 w-full"
+              className="text-sm font-medium capitalize text-custom-100 bg-custom-700 rounded px-2 py-1 w-full"
               // eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus
             />
           </div>
         ) : (
-          <h1 className="text-sm font-medium capitalize text-stone-200 truncate max-w-full pr-10">
+          <h1 className="text-sm font-medium capitalize text-custom-100 truncate max-w-full pr-10">
             {newTitle}
           </h1>
         )}
 
-        <p className="text-xs text-stone-400">
+        <p className="text-xs text-custom-300">
           {isValideDate(date) ? formatDate(date) : 'Date not available'}
         </p>
       </button>
       <button
         onClick={toggleDropdown}
-        className="absolute top-1/2 right-2 transform -translate-y-1/2 rounded-full p-2 focus:outline-none hover:bg-stone-700"
+        className="absolute top-1/2 right-2 transform -translate-y-1/2 rounded-full p-2 focus:outline-none hover:bg-custom-700"
         aria-label="More options"
         type="button"
       >
@@ -135,12 +135,12 @@ const ChatItem = ({
       </button>
       {showDropdown && (
         <div
-          className="absolute -bottom-10 right-0 mt-2 py-2 w-48 bg-stone-700 rounded-md shadow-xl z-30"
+          className="absolute -bottom-10 right-0 mt-2 py-2 w-48 bg-custom-700 rounded-md shadow-xl z-30"
           ref={dropdownRef}
         >
           {onDeleteChat && (
             <button
-              className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-stone-600 text-red-600"
+              className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-custom-600 text-red-600"
               onClick={onDeleteChatHanlder}
               type="button"
             >
@@ -149,11 +149,11 @@ const ChatItem = ({
             </button>
           )}
           <button
-            className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left text-stone-200 hover:bg-stone-600"
+            className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left text-custom-100 hover:bg-custom-600"
             onClick={onRenameChatHandler}
             type="button"
           >
-            <HiPencil className="text-stone-300" />
+            <HiPencil className="text-custom-200" />
             Rename
           </button>
         </div>

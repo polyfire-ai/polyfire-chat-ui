@@ -1,52 +1,71 @@
-import React, { ReactNode } from 'react';
+import React, { useEffect } from 'react';
 import { Sidebar } from '../Sidebar';
 import Chat from '../Chat';
 import { ChatProvider, useChatContext } from '../../contexts/ChatProvider';
-
-export type MessageTheme = 'classic' | 'bubble';
-
-export type ChatUIProps = {
-  LogoRender?: ReactNode;
-  SettingRender?: ReactNode;
-  chatName?: string | ReactNode;
-  hasLogoutButton?: boolean;
-  hasNewChatButton?: boolean;
-  hasSidebar?: boolean;
-  messageTheme?: MessageTheme;
-};
+import { ChatUIProps } from '../../types';
+import { generateColorVariations } from '../../utils/color';
 
 const ChatUI: React.FC<ChatUIProps> = ({
-  SettingRender,
-  LogoRender,
-  hasLogoutButton = true,
-  hasNewChatButton = true,
-  hasSidebar = false,
+  LogoComponent,
+  SettingsComponent,
+  SidebarComponent = Sidebar,
+  includeSidebar = false,
   chatName,
-  messageTheme = 'classic',
+  showLogoutButton = true,
+  showNewChatButton = true,
+  baseChatColor,
+  ...chatProps
 }) => {
-  const { component } = useChatContext();
+  const chatInstance = useChatContext();
+
+  useEffect(() => {
+    if (baseChatColor) {
+      const colorVariations = generateColorVariations(baseChatColor);
+
+      Object.entries(colorVariations).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(key, value);
+      });
+    }
+  }, []);
+
+  const renderSidebar = () => {
+    if (includeSidebar) {
+      return SidebarComponent({
+        chatInstance,
+        hasSettingsButton: Boolean(SettingsComponent),
+        hasLogoutButton: showLogoutButton,
+        hasNewChatButton: showNewChatButton,
+        Logo: LogoComponent,
+        name: chatName,
+      });
+    }
+    return null;
+  };
+
+  const renderChat = () => {
+    if (chatInstance.component.selected === 'chat') {
+      return <Chat {...chatProps} chatInstance={chatInstance} />;
+    }
+    return null;
+  };
+
+  const renderSettings = () => {
+    if (SettingsComponent && chatInstance.component.selected === 'setting') {
+      return SettingsComponent({ chatInstance });
+    }
+    return null;
+  };
 
   return (
     <div className="flex">
-      {hasSidebar && (
-        <Sidebar
-          hasSettingsButton={Boolean(SettingRender)}
-          hasLogoutButton={hasLogoutButton}
-          hasNewChatButton={hasNewChatButton}
-          Logo={LogoRender}
-          name={chatName}
-        />
-      )}
+      {renderSidebar()}
       <div className="flex h-[100svh] w-full flex-col">
-        {component.selected === 'chat' && <Chat theme={messageTheme} />}
-        {SettingRender && component.selected === 'setting' && (
-          <div>{SettingRender}</div>
-        )}
+        {renderChat()}
+        {renderSettings()}
       </div>
     </div>
   );
 };
-
 const ChatUIWrapper: React.FC<ChatUIProps> = (props) => (
   <ChatProvider>
     <ChatUI {...props} />

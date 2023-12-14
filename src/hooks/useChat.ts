@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-
 import { useState, useEffect, useCallback } from 'react';
 
 import { generateUUIDV4 } from 'polyfire-js/helpers/uuid.js';
@@ -11,6 +10,7 @@ export type Message = {
   chat_id: string;
   content: string;
   created_at: string | null;
+  end_of_message?: boolean;
   id: string | null;
   is_user_message: boolean;
 };
@@ -137,8 +137,8 @@ export default function useChat(
 
   // Chat answer
   const [answer, setAnswer] = useState<Message>();
-  const [AnswerError, setAnswerError] = useState<string | undefined>();
-  const [AnswerLoading, setAnswerLoading] = useState<boolean>(false);
+  const [answerError, setAnswerError] = useState<string | undefined>();
+  const [answerLoading, setAnswerLoading] = useState<boolean>(false);
 
   const getChats = useCallback(async () => {
     setChatsLoading(true);
@@ -167,12 +167,15 @@ export default function useChat(
       chatId: id,
     } as ChatOptions);
 
-    setChatInstance(chatInstance);
+    setChatInstance(prevchatInstance);
     setChatId(id);
 
     prevchatInstance
       .getMessages()
-      .then(setHistory)
+      .then((res) => {
+        if (res?.length) setHistory(res.reverse());
+        else setHistory([]);
+      })
       .catch(setHistoryError)
       .finally(() => {
         setHistoryLoading(false);
@@ -259,8 +262,7 @@ export default function useChat(
   const onSendMessage = useCallback(
     async (message: string): Promise<void> => {
       try {
-        console.log({ chatInstance, AnswerLoading });
-        if (AnswerLoading) return;
+        if (answerLoading) return;
 
         setAnswerLoading(true);
         setAnswerError(undefined);
@@ -282,6 +284,7 @@ export default function useChat(
           is_user_message: true,
           content: message,
           created_at: new Date().getTime().toString(),
+          end_of_message: true,
         };
         const aiMessage: Message = {
           id: generateUUIDV4(),
@@ -289,42 +292,47 @@ export default function useChat(
           is_user_message: false,
           content: '',
           created_at: null,
+          end_of_message: false,
         };
 
-        setHistory((prev) => [userMessage, ...prev]);
+        setHistory((prev) => [...prev, userMessage]);
+        setAnswerError(undefined);
+
+        setAnswerLoading(true);
 
         const stream = newChatInstance.sendMessage(message);
 
         stream.on('data', (chunk: string) => {
           aiMessage.content += chunk;
+
           setAnswer({ ...aiMessage });
           setAnswerLoading(false);
-          console.log('in data');
         });
 
         stream.on('error', (error: string) => {
-          console.error({ error3: error });
           setAnswerError(error);
           onError?.(error);
+
           stream.stop();
         });
 
         stream.on('end', async () => {
-          setAnswer(undefined);
           aiMessage.created_at = new Date().getTime().toString();
-          setHistory((prev) => [aiMessage, ...prev]);
+          aiMessage.end_of_message = true;
+
+          setHistory((prev) => [...prev, aiMessage]);
+          setAnswer(undefined);
+
           onSuccess?.();
-          console.log('in end');
         });
       } catch (error) {
-        console.error({ error2: error });
         if (error instanceof Error) {
           setAnswerError(error.message);
           onError?.(error.message);
         }
       }
     },
-    [chatInstance, AnswerLoading]
+    [chatInstance, answerLoading]
   );
 
   useEffect(() => {
@@ -348,8 +356,8 @@ export default function useChat(
       data: history,
     },
     answer: {
-      loading: AnswerLoading,
-      error: AnswerError,
+      loading: answerLoading,
+      error: answerError,
       data: answer,
     },
     utils: {

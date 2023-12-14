@@ -1,36 +1,34 @@
 import { useEffect, useState, useRef } from 'react';
+import type { ScrollBehavior } from '../types';
 
 const useScrollToBottom = <T extends HTMLElement>(dependency: any) => {
   const [isAtBottom, setIsAtBottom] = useState(true);
-  const ref = useRef<T>(null);
+  const ref = useRef<T | null>(null);
 
   const handleScroll = () => {
+    console.log('handleScroll');
     if (ref.current) {
       const { scrollTop, scrollHeight, clientHeight } = ref.current;
-      setIsAtBottom(scrollTop + clientHeight >= scrollHeight);
+      const atBottom = scrollTop + clientHeight >= scrollHeight;
+      setIsAtBottom(atBottom);
     }
   };
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     if (ref.current) {
-      // eslint-disable-next-line no-param-reassign
-      ref.current.scrollTop = ref.current.scrollHeight;
+      ref.current.scrollTo({
+        top: ref.current.scrollHeight,
+        behavior,
+      });
     }
   };
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
     if (ref.current && isAtBottom) {
-      timeoutId = setTimeout(() => {
-        scrollToBottom();
-      }, 100);
+      scrollToBottom('instant');
+    } else {
+      handleScroll();
     }
-
-    return () => clearTimeout(timeoutId);
-  }, [JSON.stringify(dependency)]);
-
-  useEffect(() => {
-    scrollToBottom();
   }, [JSON.stringify(dependency)]);
 
   useEffect(() => {

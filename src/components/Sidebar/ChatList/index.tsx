@@ -1,17 +1,19 @@
 import React, { useCallback } from 'react';
-import { useChatContext, ChatComponent } from '../../../contexts/ChatProvider';
 import ChatItem, { Skeleton } from './Item';
 import { ChatInfos } from '../../../hooks/useChat';
+import { ChatContextValue, ChatMode } from '../../../types';
 
-const ChatList = () => {
-  const { chats, utils, component } = useChatContext();
+type Props = {
+  chatInstance: ChatContextValue;
+};
+
+const ChatList = ({ chatInstance }: Props) => {
+  const { chats, utils, component } = chatInstance;
 
   const { onSelectChat, onDeleteChat, onRenameChat } = utils;
-  const { data, loading } = chats;
 
-  const onClick = useCallback(() => {
-    component.onChange('chat' as ChatComponent);
-  }, [component]);
+  console.log('utils', utils);
+  const { data, loading } = chats;
 
   if (loading) {
     return (
@@ -23,6 +25,10 @@ const ChatList = () => {
       </>
     );
   }
+
+  const onClick = useCallback(() => {
+    component.onChange('chat' as ChatMode);
+  }, [component]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
