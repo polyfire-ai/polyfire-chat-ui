@@ -6,7 +6,6 @@ const useScrollToBottom = <T extends HTMLElement>(dependency: any) => {
   const ref = useRef<T | null>(null);
 
   const handleScroll = () => {
-    console.log('handleScroll');
     if (ref.current) {
       const { scrollTop, scrollHeight, clientHeight } = ref.current;
       const atBottom = scrollTop + clientHeight >= scrollHeight;
@@ -33,6 +32,7 @@ const useScrollToBottom = <T extends HTMLElement>(dependency: any) => {
 
   useEffect(() => {
     const element = ref.current;
+
     if (element) {
       element.addEventListener('scroll', handleScroll);
     }
@@ -42,7 +42,7 @@ const useScrollToBottom = <T extends HTMLElement>(dependency: any) => {
         element.removeEventListener('scroll', handleScroll);
       }
     };
-  }, []);
+  }, [ref.current]);
 
   return { isAtBottom, scrollToBottom, ref };
 };

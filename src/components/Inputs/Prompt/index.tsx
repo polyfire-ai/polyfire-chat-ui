@@ -1,37 +1,28 @@
 import TextareaAutosize from 'react-textarea-autosize';
-import { useState, useCallback, ChangeEvent, KeyboardEvent } from 'react';
-import SendButton from '../../Buttons/SendButton';
-import { ChatWithProps, InputStyle, TextareaProps } from '../../../types';
+import React, { useCallback, ChangeEvent, KeyboardEvent } from 'react';
+import { InputStyle, TextareaProps } from '../../../types';
+import { useChatContext } from '../../../contexts/ChatProvider';
 
-export const Prompt = ({
-  chatInstance,
-  style,
-  className,
-  ...props
-}: ChatWithProps &
-  TextareaProps & { className?: string; style?: InputStyle }) => {
-  const [prompt, setPrompt] = useState('');
-
-  if (!chatInstance) {
-    return null;
-  }
-
-  const { history, utils, answer } = chatInstance;
+export const Input: React.FC<
+  TextareaProps & { className?: string; style?: InputStyle }
+> = ({ style, className, ...props }) => {
+  const { history, utils, answer, prompt } = useChatContext();
 
   const { loading } = history;
   const { onSendMessage } = utils;
 
   const onSendMessageHandler = useCallback(() => {
-    if (prompt.length && !loading) {
-      onSendMessage(prompt).then(() => {
-        setPrompt('');
+    if (prompt.value.length && !loading) {
+      onSendMessage(prompt.value).then(() => {
+        prompt.onChange('');
       });
     }
-  }, [prompt, loading]);
+  }, [prompt.value, loading]);
 
   const onPromptChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setPrompt(e.target.value);
+    prompt.onChange(e.target.value);
   };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -40,23 +31,31 @@ export const Prompt = ({
   };
 
   return (
-    <div className="flex relative w-full items-center rounded-b-md border-t p-2 border-custom-700 bg-custom-900 thin-scrollbar-x">
-      <TextareaAutosize
-        {...props}
-        style={style}
-        autoFocus
-        id="chat"
-        minRows={1}
-        maxRows={10}
-        value={prompt}
-        className={`mx-2 flex min-h-full w-full rounded-md border  p-2 text-base border-custom-700 bg-custom-800 text-custom-50 placeholder-custom-400 focus:border-red-600 focus:ring-red-600 ${className}`}
-        onChange={onPromptChange}
-        disabled={answer.loading}
-        onKeyDown={handleKeyDown}
-        placeholder={props.placeholder || 'Type a message...'}
-        rows={1}
-      />
-      <SendButton onClick={onSendMessageHandler} />
-    </div>
+    <TextareaAutosize
+      {...props}
+      style={style}
+      autoFocus
+      id="chat"
+      minRows={1}
+      maxRows={10}
+      value={prompt.value}
+      className={`mx-2 flex min-h-full w-full rounded-md border  p-2 text-base border-custom-700 bg-custom-800 text-custom-50 placeholder-custom-400 focus:border-custom-600 focus:ring-custom-600 ${className}`}
+      onChange={onPromptChange}
+      disabled={answer.loading}
+      onKeyDown={handleKeyDown}
+      placeholder={props.placeholder || 'Type a message...'}
+      rows={1}
+    />
   );
 };
+
+export const Prompt: React.FC<
+  React.HTMLAttributes<HTMLDivElement> & { className?: string }
+> = ({ children, className, ...props }) => (
+  <div
+    {...props}
+    className={`flex w-full items-center p-2 border-custom-700 bg-custom-900 ${className}`}
+  >
+    {children}
+  </div>
+);

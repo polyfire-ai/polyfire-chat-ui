@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { ChatInstance, Message } from 'polyfire-js/hooks/useChat';
 
-import Conversation from '../../../../components/Chat/Conversation';
+import Conversation from '../../../../components/Chat/History';
 import {
   BubbleBotLoadingComponent,
   BubbleBotReplyComponent,
@@ -58,7 +58,7 @@ const mockAnswer: ChatInstance['answer'] = {
 export const DefaultConversation: StoryFn<typeof Conversation> = () => (
   <Conversation
     conversation={mockConversation}
-    className="flex-1 overflow-y-auto text-sm leading-6 shadow-md bg-custom-800 text-custom-200 sm:text-base sm:leading-7"
+    className="flex-1 overflow-y-auto text-sm leading-6 shadow-md bg-custom-800 text-custom-50 sm:text-base sm:leading-7"
     loading={false}
     answer={mockAnswer}
     BotReplyComponent={BubbleBotReplyComponent}

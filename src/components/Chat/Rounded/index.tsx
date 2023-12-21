@@ -1,7 +1,10 @@
 import Markdown from 'react-markdown';
-import CopyButton from '../../Buttons/CopyButton';
+import { Message } from 'polyfire-js/hooks/useChat';
+import React from 'react';
+
+import { CopyButton } from '../../Buttons/CopyButton';
 import { UserIcon, GPTIcon } from '../../Icons';
-import { ChatWithProps } from '../../../types';
+import { useChatContext } from '../../../contexts/ChatProvider';
 
 const RoundedUserMessageSkeleton = () => (
   <div className="flex px-4 py-7 sm:px-6 animate-pulse m-3">
@@ -29,7 +32,7 @@ const RoundedBotMessageSkeleton = () => (
   </div>
 );
 
-export const RoundedHistoryLoadingComponent = () => (
+export const RoundedHistoryLoadingComponent: React.FC = () => (
   <>
     <RoundedUserMessageSkeleton />
     <RoundedBotMessageSkeleton />
@@ -37,34 +40,64 @@ export const RoundedHistoryLoadingComponent = () => (
   </>
 );
 
-export const RoundedUserReplyComponent = ({ content }: ChatWithProps) => (
+const RoundedUserReplyComponent = ({ content }: { content: string }) => (
   <div className="flex px-4 py-8 sm:px-6 m-3">
     <UserIcon className="mr-2 flex h-8 w-8 rounded-full sm:mr-4" />
     <div className="flex w-full flex-col items-start lg:flex-row lg:justify-between">
-      <p className="max-w-3xl text-custom-200">{content}</p>
+      <p className="max-w-3xl text-custom-50">{content}</p>
     </div>
   </div>
 );
 
-export const RoundedBotReplyComponent = ({ content }: ChatWithProps) => (
-  <div className="flex px-4 py-8 sm:px-6 bg-custom-900 rounded-xl m-3">
-    <GPTIcon className="mr-2 flex h-8 w-8 rounded-full sm:mr-4" />
-    <div className="flex w-full flex-col items-start lg:flex-row lg:justify-between">
-      <Markdown className="inline max-w-3xl text-custom-200 rounded-xl">
-        {content}
-      </Markdown>
-      <div className="mt-4 flex flex-row justify-start gap-x-2 text-custom-400 lg:mt-0">
-        {content && <CopyButton textToCopy={content} />}
+const RoundedBotReplyComponent = ({
+  content,
+  isLoading,
+}: {
+  content: string;
+  isLoading?: boolean;
+}) => (
+  <div className="flex items-start px-4 py-8 sm:px-6 bg-custom-900 rounded-xl m-3">
+    <div className="flex items-center mr-2 sm:mr-4">
+      <GPTIcon className="h-8 w-8 rounded-full" />
+    </div>
+    <div className="flex flex-grow flex-col lg:flex-row lg:justify-between">
+      {isLoading ? (
+        <div className="flex items-center">
+          <div className="animate-pulse-slow h-2 w-2 bg-white rounded-full" />
+        </div>
+      ) : (
+        <Markdown className="inline max-w-3xl text-custom-50 rounded-xl">
+          {content}
+        </Markdown>
+      )}
+      <div className="mt-4 lg:mt-0">
+        <CopyButton textToCopy={content} aria-disabled={isLoading} />
       </div>
     </div>
   </div>
 );
 
-export const RoundedBotLoadingCard = () => (
-  <div className="flex px-4 py-8 sm:px-6 bg-custom-900 rounded-xl mx-3">
-    <GPTIcon className="mr-2 flex h-8 w-8 rounded-full sm:mr-4" />
-    <div className="flex w-full flex-row items-center">
-      <div className="ml-4 animate-pulse-slow h-2 w-2 bg-white rounded-full" />
-    </div>
-  </div>
-);
+export const RoundedChatListItem: React.FC<Message> = ({
+  content,
+  is_user_message: isUser,
+  id,
+}: Message) => {
+  const { answer, history } = useChatContext();
+
+  return (
+    <>
+      {isUser ? (
+        <RoundedUserReplyComponent content={content} />
+      ) : (
+        <RoundedBotReplyComponent content={content} />
+      )}
+
+      {history.data?.[history.data.length - 1]?.id === id && isUser && (
+        <RoundedBotReplyComponent
+          content={answer.data?.content || ''}
+          isLoading={answer.loading}
+        />
+      )}
+    </>
+  );
+};

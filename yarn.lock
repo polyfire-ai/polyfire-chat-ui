@@ -10428,10 +10428,10 @@ polyfact-io-ts@^2.2.20:
   resolved "https://registry.yarnpkg.com/polyfact-io-ts/-/polyfact-io-ts-2.2.20.tgz#ffb2226d71bf780c0dd398e052aa768c7af167b8"
   integrity sha512-qGF6cWn4sKKrVULhJPRIBF/iOvyFLJpeR59ejD9BpSmSjj+xaY5GE98SRycloR0ORQVMZuedi71VurSTBq5zeQ==
 
-polyfire-js@^0.2.25:
-  version "0.2.25"
-  resolved "https://registry.yarnpkg.com/polyfire-js/-/polyfire-js-0.2.25.tgz#24458644f5a7eafef687ed6cc7184b662574fa01"
-  integrity sha512-8fnykset+HvWiwyKBrjkmORqTysZZKF7FYspSsFFv0jXAHBNNucYTm7Zv+pqmlrVn28acA4zhUAxJYHD6/ByDg==
+polyfire-js@^0.2.27:
+  version "0.2.27"
+  resolved "https://registry.yarnpkg.com/polyfire-js/-/polyfire-js-0.2.27.tgz#f8401ebe20703f5abb92836bab1038448a6a4849"
+  integrity sha512-mVOGNRYMszwVWjaZdGouQ7j/JgfV3fOx8FX3R7u9Q0W0TCWHtaBxQcKvPmUTwIZ2HyjmklrnWGayMjtE+fBtRQ==
   dependencies:
     "@supabase/supabase-js" "^2.31.0"
     "@types/lodash.debounce" "^4.0.9"

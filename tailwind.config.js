@@ -20,16 +20,16 @@ module.exports = {
       },
       colors: {
         custom: {
-          50: 'var(--color-custom-50, #fafaf9)', // Stone 50
-          100: 'var(--color-custom-100, #f5f5f4)', // Stone 100
-          200: 'var(--color-custom-200, #e7e5e4)', // Stone 200
-          300: 'var(--color-custom-300, #d6d3d1)', // Stone 300
-          400: 'var(--color-custom-400, #a8a29e)', // Stone 400
-          500: 'var(--color-custom-500, #78716c)', // Stone 500
-          600: 'var(--color-custom-600, #57534e)', // Stone 600
-          700: 'var(--color-custom-700, #44403c)', // Stone 700
-          800: 'var(--color-custom-800, #292524)', // Stone 800
-          900: 'var(--color-custom-900, #1c1917)', // Stone 900
+          50: 'var(--color-custom-50, "")', // Stone 50
+          100: 'var(--color-custom-100, "")', // Stone 100
+          200: 'var(--color-custom-200, "")', // Stone 200
+          300: 'var(--color-custom-300, "")', // Stone 300
+          400: 'var(--color-custom-400, "")', // Stone 400
+          500: 'var(--color-custom-500, "")', // Stone 500
+          600: 'var(--color-custom-600, "")', // Stone 600
+          700: 'var(--color-custom-700, "")', // Stone 700
+          800: 'var(--color-custom-800, "")', // Stone 800
+          900: 'var(--color-custom-900, "")', // Stone 900
         },
       },
     },

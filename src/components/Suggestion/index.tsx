@@ -10,7 +10,7 @@ const SuggestionsPanel: React.FC<SuggestionsPanelProps> = ({
   suggestions,
   onSuggestionClick,
 }) => (
-  <div className="absolute m-2 flex w-11/12 bottom-[calc(100%+10px)] gap-x-2 overflow-x-auto whitespace-nowrap text-xs text-custom-200 sm:text-sm z-10 thin-scrollbar-x">
+  <div className="absolute m-2 flex w-11/12 bottom-[calc(100%+10px)] gap-x-2 overflow-x-auto whitespace-nowrap text-xs text-custom-50 sm:text-sm z-10 thin-scrollbar-x">
     {suggestions.map((suggestion) => (
       <button
         key={suggestion.title}

@@ -20,6 +20,7 @@ export const ChatProvider: React.FC<{
 }> = ({ children, options }) => {
   const chatInstance = useChat(options);
   const [showComponent, setShowComponent] = useState<ChatMode>('chat');
+  const [prompt, setPrompt] = useState('');
 
   const { ref, isAtBottom, scrollToBottom } = useScrollToBottom<HTMLDivElement>(
     [chatInstance.history.data, chatInstance.answer.data]
@@ -38,8 +39,9 @@ export const ChatProvider: React.FC<{
         onScrollToBottom: scrollToBottom,
       } as ChatContextValue['utils'],
       component: { selected: showComponent, onChange: setShowComponent },
+      prompt: { value: prompt, onChange: setPrompt },
     }),
-    [JSON.stringify(chatInstance), showComponent, isAtBottom]
+    [JSON.stringify(chatInstance), showComponent, isAtBottom, prompt]
   );
 
   return (

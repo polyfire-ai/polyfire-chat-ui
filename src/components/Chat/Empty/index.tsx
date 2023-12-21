@@ -1,9 +1,11 @@
-export const ChatWelcomeScreen = () => (
+import React from 'react';
+
+export const HistoryEmptyComponent: React.FC = () => (
   <div className="flex items-center justify-center w-full h-full bg-custom-800 text-custom-100">
     <div className="text-center">
       <h1 className="text-4xl font-bold">👋</h1>
 
-      <h2 className="text-2xl font-semibold text-custom-200 mt-4">
+      <h2 className="text-2xl font-semibold text-custom-50 mt-4">
         Hello, How can I assist you today?
       </h2>
       <p className="mt-2 text-custom-300">

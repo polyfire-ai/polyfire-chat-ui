@@ -1,5 +1,10 @@
 import React, { ReactNode } from 'react';
-import type { ChatInstance, Message } from 'polyfire-js/hooks/useChat.js';
+import type { ChatInstance } from 'polyfire-js/hooks/useChat.js';
+import { ChatOptions } from 'polyfire-js/chats';
+import {
+  Login,
+  Provider,
+} from '../components/Root/AuthGuard/UnauthenticatedView';
 
 // General UI Types
 export type ScrollBehavior = 'auto' | 'instant' | 'smooth';
@@ -19,46 +24,12 @@ export type InputStyle = Omit<
 // Chat Component Specific Types
 export type ChatMode = 'chat' | 'setting';
 
-export type ChatWithProps = {
-  [key: string]: any;
-  chatInstance?: ChatContextValue;
-  content?: string;
-};
-
-export type CustomComponentProps = (props: ChatWithProps) => React.ReactNode;
-
-type ConversationRef = React.HTMLAttributes<HTMLDivElement>;
-
-type ChatComponents = {
-  BotLoading: CustomComponentProps;
-  BotReply: CustomComponentProps;
-  ChatWelcomeScreen: CustomComponentProps;
-  HistoryLoading: CustomComponentProps;
-  Prompt: CustomComponentProps;
-  UserReply: CustomComponentProps;
-};
-
-export interface ConversationProps
-  extends ConversationRef,
-    Omit<ChatComponents, 'Prompt'> {
-  answer: ChatInstance['answer'];
-  chatInstance: ChatContextValue;
-  containerStyle?: React.CSSProperties;
-  conversation: Message[];
-  loading: boolean;
-}
-
 export interface PromptProps {
   inputClass?: string;
   inputPlaceholder?: string;
   inputStyle?: InputStyle;
   suggestions?: Suggestion[];
 }
-
-export type ChatProps = Partial<ChatComponents> & {
-  chatInstance: ChatContextValue;
-  suggestions?: Suggestion[];
-};
 
 export type ChatContextValue = ChatInstance & {
   chat: ChatInstance['chat'] & {
@@ -68,6 +39,10 @@ export type ChatContextValue = ChatInstance & {
   component: {
     onChange: (component: ChatMode) => void;
     selected: ChatMode;
+  };
+  prompt: {
+    onChange: (value: string) => void;
+    value: string;
   };
   utils: ChatInstance['utils'] & {
     onScrollToBottom: (behavior: ScrollBehavior) => void;
@@ -93,14 +68,26 @@ export type MessageAction = {
   onClick: (messageId: string) => void;
 } & AtLeastOneOf<ActionDisplayOptions>;
 
+export type CustomChatColor = {
+  100?: string;
+  200?: string;
+  300?: string;
+  400?: string;
+  50?: string;
+  500?: string;
+  600?: string;
+  700?: string;
+  800?: string;
+  900?: string;
+};
+
 // Chat UI Types
 export type ChatUIProps = {
-  LogoComponent?: ReactNode;
-  SettingsComponent?: CustomComponentProps;
-  SidebarComponent?: CustomComponentProps;
-  baseChatColor?: string;
-  chatName?: string | ReactNode;
-  includeSidebar?: boolean;
-  showLogoutButton?: boolean;
-  showNewChatButton?: boolean;
-} & Omit<ChatProps, 'chatInstance'>;
+  UnauthenticatedViewComponent?: React.ComponentType<{
+    login: Login;
+    providers?: Provider[];
+  }>;
+  baseChatColor?: string | CustomChatColor;
+  children?: ReactNode;
+  options?: Omit<ChatOptions, 'chatId'>;
+};

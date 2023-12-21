@@ -85,11 +85,11 @@ const rgbToHex = (r: number, g: number, b: number): string =>
 
 export function generateColorVariations(
   baseColor: string
-): Record<string, string> {
+): Record<number, string> {
   const [r, g, b] = hexToRgb(baseColor);
   const [h, s, baseL] = rgbToHsl(r, g, b);
 
-  const variations: Record<string, string> = {};
+  const variations: Record<number, string> = {};
   const factorDarker = 0.065;
   const factorLighter = 0.1;
   const midPoint = 5;
@@ -109,7 +109,7 @@ export function generateColorVariations(
     }
 
     const [newR, newG, newB] = hslToRgb(h, s, l);
-    variations[`--color-custom-${keys[i]}`] = rgbToHex(newR, newG, newB);
+    variations[keys[i]] = rgbToHex(newR, newG, newB);
   }
 
   return variations;

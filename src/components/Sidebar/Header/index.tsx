@@ -1,22 +1,35 @@
-import { ReactNode } from 'react';
-import { MdChatBubbleOutline } from 'react-icons/md/index.js';
+import React, { ComponentType, ReactNode } from 'react';
 
-const SidebarHeader = ({
-  Logo = <MdChatBubbleOutline className="h-5 w-5 text-white" />,
-  name,
-  children,
-}: {
-  Logo?: ReactNode;
-  children?: ReactNode;
+export type SidebarHeaderProps = {
+  Logo?: ComponentType<{ className?: string }>;
+  containerProps?: React.HTMLAttributes<HTMLDivElement>;
+  logoProps?: React.SVGAttributes<SVGSVGElement>;
   name?: string | ReactNode;
+  titleProps?: React.HTMLAttributes<HTMLHeadingElement>;
+};
+
+export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
+  Logo,
+  containerProps: {
+    className: containerClassName = '',
+    ...containerProps
+  } = {},
+  logoProps: { className: logoClassName = '', ...logoProps } = {},
+  titleProps: { className: titleClassName = '', ...titleProps } = {},
+  name = 'Polyfire Chatbot',
 }) => (
-  <div className="flex items-center px-4">
-    {Logo}
-    <h2 className="px-2 text-lg font-medium text-custom-700 dark:text-custom-100">
-      {name || 'Chats'}
-      {children}
+  <div
+    className={`flex items-center py-4 space-x-2 ${containerClassName}`}
+    {...containerProps}
+  >
+    {Logo && (
+      <Logo className={`h-5 w-5 text-white ${logoClassName}`} {...logoProps} />
+    )}
+    <h2
+      className={`text-lg font-medium text-custom-100 ${titleClassName}`}
+      {...titleProps}
+    >
+      {name}
     </h2>
   </div>
 );
-
-export default SidebarHeader;

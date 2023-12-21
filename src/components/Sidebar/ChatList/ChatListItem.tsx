@@ -1,29 +1,28 @@
-import { useState, useRef, useEffect, ChangeEvent } from 'react';
+import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 import { HiDotsHorizontal, HiTrash, HiPencil } from 'react-icons/hi/index.js';
 import { ChatInfos } from '../../../hooks/useChat';
 import { isValideDate, formatDate } from '../../../utils/date';
 
-export const Skeleton = () => (
+export const SkeletonChatItem: React.FC = () => (
   // eslint-disable-next-line jsx-a11y/control-has-associated-label
-  <button
-    type="button"
-    className="animate-pulse bg-custom-800 rounded w-full flex flex-col gap-y-2 rounded-lg px-3 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-custom-800"
-  >
-    <div className="h-4 rounded" />
+  <div className="animate-pulse bg-custom-800 my-2 rounded-lg px-3 py-2">
+    <div className="h-4 rounded mb-2" />
     <div className="h-3 rounded w-1/2" />
-  </button>
+  </div>
 );
 
-const ChatItem = ({
-  chat,
-  onSelectChat,
-  onDeleteChat,
-  onRenameChat,
-}: {
+export type ChatItemProps = {
   chat: ChatInfos;
   onDeleteChat?: (id: string) => void;
   onRenameChat?: (id: string, name: string) => void;
   onSelectChat: (id: string) => void;
+};
+
+export const ChatItem: React.FC<ChatItemProps> = ({
+  chat,
+  onSelectChat,
+  onDeleteChat,
+  onRenameChat,
 }) => {
   const title = chat.name || chat.latest_message_content || 'No name';
   const date = chat.latest_message_created_at;
@@ -95,7 +94,7 @@ const ChatItem = ({
     <div className="relative w-full">
       <button
         type="button"
-        className="w-full flex flex-col gap-y-2 rounded-lg px-3 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-custom-800"
+        className="w-full flex flex-col gap-y-2 rounded-lg px-2 py-2 text-left transition-colors duration-200 focus:outline-none hover:bg-custom-800"
         onClick={onSelectChatHandler}
       >
         {showInput ? (
@@ -131,7 +130,7 @@ const ChatItem = ({
         aria-label="More options"
         type="button"
       >
-        <HiDotsHorizontal className="text-white" />
+        <HiDotsHorizontal className="text-custom-50" />
       </button>
       {showDropdown && (
         <div
@@ -153,7 +152,7 @@ const ChatItem = ({
             onClick={onRenameChatHandler}
             type="button"
           >
-            <HiPencil className="text-custom-200" />
+            <HiPencil className="text-custom-50" />
             Rename
           </button>
         </div>
@@ -161,5 +160,3 @@ const ChatItem = ({
     </div>
   );
 };
-
-export default ChatItem;
