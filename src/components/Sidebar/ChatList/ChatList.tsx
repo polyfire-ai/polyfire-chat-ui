@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from 'react';
+import { ChatInfos } from 'polyfire-js/chats';
 import { SkeletonChatItem, ChatItem } from './ChatListItem';
-import { ChatInfos } from '../../../hooks/useChat';
 import { useChatContext } from '../../../contexts/ChatProvider';
 
 export const ChatList: React.FC<HTMLAttributes<HTMLDivElement>> = ({
@@ -9,7 +9,7 @@ export const ChatList: React.FC<HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   const { chats, utils } = useChatContext();
 
-  const { onSelectChat, onDeleteChat, onRenameChat } = utils;
+  const { selectChat, deleteChat, renameChat } = utils;
   const { data, loading } = chats;
 
   if (loading) {
@@ -33,9 +33,9 @@ export const ChatList: React.FC<HTMLAttributes<HTMLDivElement>> = ({
           <ChatItem
             key={item.id}
             chat={item}
-            onSelectChat={onSelectChat}
-            onDeleteChat={onDeleteChat}
-            onRenameChat={onRenameChat}
+            onSelectChat={selectChat}
+            onDeleteChat={deleteChat}
+            onRenameChat={renameChat}
           />
         ))}
     </div>

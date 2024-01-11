@@ -21,7 +21,7 @@ export const PromptCards = ({ cards }: PromptCardsProps) => {
           className="col-span-1 rounded-lg bg-slate-50 shadow dark:bg-slate-900"
         >
           <button
-            onClick={() => chatInstance?.utils.onSendMessage(card.content)}
+            onClick={() => chatInstance?.utils.sendMessage(card.content)}
             type="button"
           >
             <div className="flex w-full items-center justify-between space-x-6 p-6">

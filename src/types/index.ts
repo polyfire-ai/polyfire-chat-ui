@@ -87,7 +87,7 @@ export type ChatUIProps = {
     login: Login;
     providers?: Provider[];
   }>;
-  baseChatColor?: string | CustomChatColor;
+  baseChatColor?: 'light' | 'dark' | 'auto' | `#${string}` | CustomChatColor;
   children?: ReactNode;
   fullscreen?: boolean;
   options?: Omit<ChatOptions, 'chatId'>;

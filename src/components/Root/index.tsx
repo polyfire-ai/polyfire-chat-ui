@@ -5,6 +5,38 @@ import { ChatUIProps, CustomChatColor } from '../../types';
 import { generateColorVariations } from '../../utils/color';
 import { AuthGuard } from './AuthGuard';
 
+const darkTheme: CustomChatColor = {
+  50: '#f8fafc',
+  100: '#f1f5f9',
+  300: '#d1d5db',
+  400: '#9ca3af',
+  600: '#4b5563',
+  700: '#374151',
+  800: '#1f2937',
+  900: '#111827',
+};
+
+const lightTheme: CustomChatColor = {
+  50: '#111827',
+  100: '#1f2937',
+  300: '#374151',
+  400: '#4b5563',
+  600: '#9ca3af',
+  700: '#d1d5db',
+  800: '#f1f5f9',
+  900: '#f8fafc',
+};
+
+const isDarkMode = () =>
+  window.matchMedia &&
+  window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+const applyTheme = (theme: CustomChatColor) => {
+  Object.entries(theme).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--color-custom-${key}`, value);
+  });
+};
+
 export const Root: React.FC<ChatUIProps> = ({
   children,
   UnauthenticatedViewComponent,
@@ -13,26 +45,35 @@ export const Root: React.FC<ChatUIProps> = ({
   fullscreen = false,
   ...props
 }) => {
-  const link = document.createElement('link');
-  link.href = './styles.css';
-  link.rel = 'stylesheet';
-  document.head.appendChild(link);
-
   useEffect(() => {
-    if (!baseChatColor) return;
+    let theme;
+    try {
+      if (typeof baseChatColor === 'string') {
+        switch (baseChatColor) {
+          case 'dark':
+            theme = darkTheme;
+            break;
+          case 'light':
+            theme = lightTheme;
+            break;
+          case 'auto':
+            theme = isDarkMode() ? darkTheme : lightTheme;
+            break;
+          default:
+            theme = generateColorVariations(baseChatColor);
+            break;
+        }
+      } else if (typeof baseChatColor === 'object') {
+        theme = baseChatColor;
+      } else {
+        theme = darkTheme;
+      }
 
-    const colorVariations =
-      typeof baseChatColor === 'string'
-        ? (generateColorVariations(baseChatColor) as CustomChatColor)
-        : baseChatColor;
-
-    Object.entries(colorVariations).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(
-        `--color-custom-${key}`,
-        value
-      );
-    });
-  }, []);
+      applyTheme(theme);
+    } catch (error) {
+      applyTheme(darkTheme);
+    }
+  }, [baseChatColor]);
 
   const display = fullscreen ? 'screen' : 'full';
   return (

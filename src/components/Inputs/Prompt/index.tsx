@@ -9,11 +9,11 @@ export const Input: React.FC<
   const { history, utils, answer, prompt } = useChatContext();
 
   const { loading } = history;
-  const { onSendMessage } = utils;
+  const { sendMessage } = utils;
 
   const onSendMessageHandler = useCallback(() => {
     if (prompt.value.length && !loading) {
-      onSendMessage(prompt.value).then(() => {
+      sendMessage(prompt.value).then(() => {
         prompt.onChange('');
       });
     }
