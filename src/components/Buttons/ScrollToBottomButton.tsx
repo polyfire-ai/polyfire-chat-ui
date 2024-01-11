@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { ScrollBehavior } from '../../types';
+import { useChatContext } from '../../contexts/ChatProvider';
 
 export type ScrollToBottomButtonProps = {
   className?: string;
-  disabled?: boolean;
   icon?: React.ReactNode;
   onClick: (behavior: ScrollBehavior) => void;
 };
@@ -29,21 +29,33 @@ const DefaultIcon = () => (
 );
 
 export const ScrollToBottomButton: React.FC<ScrollToBottomButtonProps> = ({
-  disabled = false,
   onClick,
   className = '',
   icon = <DefaultIcon />,
-}) => (
-  <div className="relative">
-    {!disabled && (
-      <button
-        type="button"
-        aria-label="Scroll to bottom"
-        onClick={() => onClick('smooth')}
-        className={`cursor-pointer absolute z-10 rounded-full bg-clip-padding border border-white/10 bg-white/10 text-custom-50 right-1/2 transform translate-x-1/2 bottom-[calc(100%+10px)] ${className}`}
-      >
-        {icon}
-      </button>
-    )}
-  </div>
-);
+}) => {
+  const { utils, chat } = useChatContext();
+
+  const handleClick = () => {
+    if (chat.isAtBottom) return;
+
+    const behavior = 'smooth';
+
+    utils.scrollToBottom(behavior);
+    onClick?.(behavior);
+  };
+
+  return (
+    <div className="relative">
+      {!chat.isAtBottom && (
+        <button
+          type="button"
+          aria-label="Scroll to bottom"
+          onClick={handleClick}
+          className={`cursor-pointer absolute z-10 rounded-full bg-clip-padding border border-white/10 bg-white/10 text-custom-50 right-1/2 transform translate-x-1/2 bottom-[calc(100%+10px)] ${className}`}
+        >
+          {icon}
+        </button>
+      )}
+    </div>
+  );
+};

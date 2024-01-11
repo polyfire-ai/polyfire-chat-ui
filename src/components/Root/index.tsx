@@ -10,6 +10,7 @@ export const Root: React.FC<ChatUIProps> = ({
   UnauthenticatedViewComponent,
   baseChatColor,
   options,
+  fullscreen = false,
   ...props
 }) => {
   useEffect(() => {
@@ -27,11 +28,13 @@ export const Root: React.FC<ChatUIProps> = ({
       );
     });
   }, []);
+
+  const display = fullscreen ? 'screen' : 'full';
   return (
     <ChatProvider options={options as ChatOptions}>
       <AuthGuard UnauthenticatedViewComponent={UnauthenticatedViewComponent}>
         <div
-          className="flex flex-row h-full w-full overflow-y-hidden"
+          className={`flex flex-row h-${display} w-${display} overflow-y-hidden`}
           {...props}
         >
           {children}

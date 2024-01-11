@@ -89,5 +89,6 @@ export type ChatUIProps = {
   }>;
   baseChatColor?: string | CustomChatColor;
   children?: ReactNode;
+  fullscreen?: boolean;
   options?: Omit<ChatOptions, 'chatId'>;
 };
