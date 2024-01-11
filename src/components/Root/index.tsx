@@ -13,6 +13,11 @@ export const Root: React.FC<ChatUIProps> = ({
   fullscreen = false,
   ...props
 }) => {
+  const link = document.createElement('link');
+  link.href = './styles.css';
+  link.rel = 'stylesheet';
+  document.head.appendChild(link);
+
   useEffect(() => {
     if (!baseChatColor) return;
 

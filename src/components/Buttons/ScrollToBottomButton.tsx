@@ -1,13 +1,13 @@
 // ScrollToBottomButtonButton.tsx
 
-import React from 'react';
-import { ScrollBehavior } from '../../types';
+import React, { MouseEventHandler } from 'react';
+
 import { useChatContext } from '../../contexts/ChatProvider';
 
 export type ScrollToBottomButtonProps = {
   className?: string;
   icon?: React.ReactNode;
-  onClick: (behavior: ScrollBehavior) => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 const DefaultIcon = () => (
@@ -35,13 +35,13 @@ export const ScrollToBottomButton: React.FC<ScrollToBottomButtonProps> = ({
 }) => {
   const { utils, chat } = useChatContext();
 
-  const handleClick = () => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     if (chat.isAtBottom) return;
 
     const behavior = 'smooth';
 
     utils.scrollToBottom(behavior);
-    onClick?.(behavior);
+    onClick?.(e);
   };
 
   return (
