@@ -18,15 +18,15 @@ export const SendButton: React.FC<SendButtonProps> = ({
 }) => {
   const { history, utils, prompt } = useChatContext();
   const { loading } = history;
-  const { onSendMessage } = utils;
+  const { sendMessage } = utils;
 
   const onSendMessageHandler = useCallback(() => {
     if (prompt.value.length && !loading) {
-      onSendMessage(prompt.value).then(() => {
+      sendMessage(prompt.value).then(() => {
         prompt.onChange('');
       });
     }
-  }, [prompt.value, loading, onSendMessage]);
+  }, [prompt.value, loading, sendMessage]);
 
   return (
     <button

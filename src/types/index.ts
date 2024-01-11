@@ -45,7 +45,7 @@ export type ChatContextValue = ChatInstance & {
     value: string;
   };
   utils: ChatInstance['utils'] & {
-    onScrollToBottom: (behavior: ScrollBehavior) => void;
+    scrollToBottom: (behavior: ScrollBehavior) => void;
   };
 };
 

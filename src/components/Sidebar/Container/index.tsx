@@ -67,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         } h-full z-50 transition-all sm:relative sm:left-0`}
       >
         <div
-          className={`flex h-[100svh] w-60 flex-col overflow-y-auto p-1 sm:h-[100svh] bg-custom-900 border-r border-custom-700 ${className}`}
+          className={`flex h-full w-60 flex-col overflow-y-auto p-1 bg-custom-900 border-r border-custom-700 ${className}`}
           {...props}
         >
           {children}

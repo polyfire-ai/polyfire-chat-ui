@@ -22,7 +22,7 @@ export const NewChatButton: React.FC<NewChatButtonProps> = ({
   const onPressNewChat = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    utils.onResetChat();
+    utils.resetChat();
     onClick?.(e);
   };
 

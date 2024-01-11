@@ -31,7 +31,7 @@ export const Root: React.FC<ChatUIProps> = ({
     <ChatProvider options={options as ChatOptions}>
       <AuthGuard UnauthenticatedViewComponent={UnauthenticatedViewComponent}>
         <div
-          className="flex flex-row h-screen w-full overflow-y-hidden"
+          className="flex flex-row h-full w-full overflow-y-hidden"
           {...props}
         >
           {children}

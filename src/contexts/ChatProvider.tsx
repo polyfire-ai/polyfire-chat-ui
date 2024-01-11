@@ -6,9 +6,8 @@ import React, {
   useState,
 } from 'react';
 import type { ChatOptions } from 'polyfire-js/chats/index.js';
-// import { useChat } from 'polyfire-js/hooks/index.js';
+import { useChat } from 'polyfire-js/hooks/index.js';
 
-import useChat from '../hooks/useChat';
 import { ChatMode, ChatContextValue } from '../types';
 import useScrollToBottom from '../hooks/useScrollToBottom';
 
@@ -36,7 +35,7 @@ export const ChatProvider: React.FC<{
       } as ChatContextValue['chat'],
       utils: {
         ...chatInstance.utils,
-        onScrollToBottom: scrollToBottom,
+        scrollToBottom,
       } as ChatContextValue['utils'],
       component: { selected: showComponent, onChange: setShowComponent },
       prompt: { value: prompt, onChange: setPrompt },

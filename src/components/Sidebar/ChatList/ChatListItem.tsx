@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 import { HiDotsHorizontal, HiTrash, HiPencil } from 'react-icons/hi/index.js';
-import { ChatInfos } from '../../../hooks/useChat';
+import { ChatInfos } from 'polyfire-js/chats';
+
 import { isValideDate, formatDate } from '../../../utils/date';
 
 export const SkeletonChatItem: React.FC = () => (
