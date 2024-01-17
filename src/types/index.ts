@@ -90,5 +90,7 @@ export type ChatUIProps = {
   baseChatColor?: 'light' | 'dark' | 'auto' | `#${string}` | CustomChatColor;
   children?: ReactNode;
   fullscreen?: boolean;
+  onError?: (error: string) => void;
+  onSuccess?: () => void;
   options?: Omit<ChatOptions, 'chatId'>;
 };

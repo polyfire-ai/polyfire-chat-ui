@@ -43,6 +43,8 @@ export const Root: React.FC<ChatUIProps> = ({
   baseChatColor,
   options,
   fullscreen = false,
+  onSuccess,
+  onError,
   ...props
 }) => {
   useEffect(() => {
@@ -77,7 +79,11 @@ export const Root: React.FC<ChatUIProps> = ({
 
   const display = fullscreen ? 'screen' : 'full';
   return (
-    <ChatProvider options={options as ChatOptions}>
+    <ChatProvider
+      options={options as ChatOptions}
+      onError={onError}
+      onSuccess={onSuccess}
+    >
       <AuthGuard UnauthenticatedViewComponent={UnauthenticatedViewComponent}>
         <div
           className={`flex flex-row h-${display} w-${display} overflow-y-hidden`}
