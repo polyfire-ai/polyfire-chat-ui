@@ -1,7 +1,7 @@
 {
   "name": "@polyfire-ai/chat-ui",
   "description": "",
-  "version": "0.0.239",
+  "version": "0.0.240",
   "author": "",
   "license": "",
   "keywords": [],
@@ -97,7 +97,7 @@
     "@types/tinycolor2": "^1.4.6",
     "chroma-js": "^2.4.2",
     "color": "^4.2.3",
-    "polyfire-js": "^0.2.39",
+    "polyfire-js": "^0.2.43",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
