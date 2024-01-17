@@ -20,8 +20,6 @@ export const SendButton: React.FC<SendButtonProps> = ({
   const { loading } = history;
   const { sendMessage } = utils;
 
-  console.log(utils);
-
   const onSendMessageHandler = useCallback(() => {
     if (prompt.value.length && !loading) {
       sendMessage(prompt.value).then(() => {

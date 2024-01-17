@@ -92,7 +92,7 @@ export const Root: React.FC<ChatUIProps> = ({
 
 export type ViewProps = {
   children: ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export const View: React.FC<ViewProps> = ({ children, ...props }) => (
   <div className="relative flex flex-col flex-grow" {...props}>
