@@ -15,9 +15,11 @@ const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 
 export const ChatProvider: React.FC<{
   children: ReactNode;
+  onError?: (error: string) => void;
+  onSuccess?: () => void;
   options?: Partial<ChatOptions>;
-}> = ({ children, options }) => {
-  const chatInstance = useChat(options);
+}> = ({ children, options, onSuccess, onError }) => {
+  const chatInstance = useChat(options, onError, onSuccess);
   const [showComponent, setShowComponent] = useState<ChatMode>('chat');
   const [prompt, setPrompt] = useState('');
 
