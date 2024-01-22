@@ -8,6 +8,7 @@ import React, {
 import type { ChatOptions } from 'polyfire-js/chats/index.js';
 import { useChat } from 'polyfire-js/hooks/index.js';
 
+import { Message } from 'polyfire-js/hooks/useChat';
 import { ChatMode, ChatContextValue } from '../types';
 import useScrollToBottom from '../hooks/useScrollToBottom';
 
@@ -16,7 +17,7 @@ const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 export const ChatProvider: React.FC<{
   children: ReactNode;
   onError?: (error: string) => void;
-  onSuccess?: () => void;
+  onSuccess?: (message: Message) => void;
   options?: Partial<ChatOptions>;
 }> = ({ children, options, onSuccess, onError }) => {
   const chatInstance = useChat(options, onError, onSuccess);

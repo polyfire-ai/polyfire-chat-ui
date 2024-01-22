@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import type { ChatInstance } from 'polyfire-js/hooks/useChat.js';
+import type { ChatInstance, Message } from 'polyfire-js/hooks/useChat.js';
 import { ChatOptions } from 'polyfire-js/chats';
 import {
   Login,
@@ -91,6 +91,6 @@ export type ChatUIProps = {
   children?: ReactNode;
   fullscreen?: boolean;
   onError?: (error: string) => void;
-  onSuccess?: () => void;
+  onSuccess?: (message: Message) => void;
   options?: Omit<ChatOptions, 'chatId'>;
 };

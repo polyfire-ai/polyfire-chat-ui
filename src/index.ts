@@ -27,6 +27,11 @@ import {
 import { Prompt, Input } from './components/Inputs/Prompt';
 
 import {
+  AudioRecorderButton,
+  AudioRecorderButtonProps,
+} from './components/Buttons/AudioRecorderButton';
+
+import {
   LogoutButton,
   LogoutButtonProps,
 } from './components/Sidebar/Button/LogoutButton';
@@ -71,6 +76,7 @@ export type {
   ChatItemProps,
   SidebarProps,
   SidebarHeaderProps,
+  AudioRecorderButtonProps,
 };
 
 export default {
@@ -93,6 +99,7 @@ export default {
   NewChatButton,
   SidebarButton,
   SidebarButtonGroup,
+  AudioRecorderButton,
   ChatList,
   ChatItem,
   SkeletonChatItem,
